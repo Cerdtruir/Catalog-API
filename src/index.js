@@ -81,9 +81,9 @@ async function generateHTML() {
     commentsButton.classList.add('comments-button');
     commentsButton.innerText = 'Comments';
 
-    const reservationsButton = document.createElement('button');
-    reservationsButton.classList.add('reservations-button');
-    reservationsButton.innerText = 'Reservations';
+    const orderButton = document.createElement('button');
+    orderButton.classList.add('order-button');
+    orderButton.innerText = 'Order';
 
     textContainer.append(name, heart, likeCounterText, likeCounterNumber);
     recipeContainer.append(image, textContainer, commentsButton, orderButton);
