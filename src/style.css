@@ -50,17 +50,21 @@ a {
 .text-container {
   display: flex;
   align-items: center;
-  width: 60%;
-  justify-content: space-between;
+  width: 90%;
+}
+
+.recipe-heading {
+  margin-right: auto;
 }
 
 .heart {
   color: red;
   font-size: 30px;
+  cursor: pointer;
 }
 
 .comments-button,
-.reservations-button {
+.order-button {
   width: 50%;
   height: 40px;
   margin-top: 10px;
