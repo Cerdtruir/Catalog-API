@@ -9,8 +9,10 @@ async function get(category) {
 }
 
 async function likeAPI(itemID, heart, likeCounterNumber) {
+  const currentValue = Number(likeCounterNumber.innerText);
   if (heart.innerHTML === '♡') {
     heart.innerHTML = '&#10084;';
+    likeCounterNumber.innerText = currentValue + 1;
     await fetch(
       'https://us-central1-involvement-api.cloudfunctions.net/capstoneApi/apps/gPGYyR5ezimXgm2rDsPh/likes',
       {
@@ -26,11 +28,22 @@ async function likeAPI(itemID, heart, likeCounterNumber) {
   }
 }
 
+async function getLikeAPI() {
+  const response = await fetch(
+    'https://us-central1-involvement-api.cloudfunctions.net/capstoneApi/apps/gPGYyR5ezimXgm2rDsPh/likes',
+  );
+  const jsonResponse = await response.json();
+  return jsonResponse;
+}
+
 async function generateHTML() {
   const meals = await get('seafood');
   console.log(meals);
   const page = document.getElementById('main');
+  const likesArray = await getLikeAPI();
+  const meals = await get('seafood');
   meals.forEach((meal) => {
+    const id = meal.idMeal;
     const recipeContainer = document.createElement('div');
     recipeContainer.classList.add('recipe-block');
 
@@ -40,6 +53,20 @@ async function generateHTML() {
 
     const textContainer = document.createElement('div');
     textContainer.classList.add('text-container');
+
+    const likeCounterText = document.createElement('p');
+    likeCounterText.innerText = 'Likes: ';
+
+    const likeCounterNumber = document.createElement('p');
+    likeCounterNumber.classList.add('links-counter');
+    likesArray.forEach((like) => {
+      if (like.item_id === id) {
+        likeCounterNumber.innerText = like.likes;
+      }
+    });
+    if (likeCounterNumber.innerText === '') {
+      likeCounterNumber.innerText = 0;
+    }
 
     const heart = document.createElement('p');
     heart.classList.add('heart');
@@ -60,13 +87,7 @@ async function generateHTML() {
     reservationsButton.classList.add('reservations-button');
     reservationsButton.innerText = 'Reservations';
 
-    textContainer.append(name, heart);
-    recipeContainer.append(
-      image,
-      textContainer,
-      commentsButton,
-      reservationsButton,
-    );
+    textContainer.append(name, heart, likeCounterText, likeCounterNumber);
     page.appendChild(recipeContainer);
   });
 }
