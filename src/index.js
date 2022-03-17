@@ -1,4 +1,5 @@
 import './style.css';
+import countMeals from './counter.js';
 
 async function get(category) {
   const response = await fetch(
@@ -40,6 +41,7 @@ async function generateHTML() {
   const page = document.getElementById('main');
   const likesArray = await getLikeAPI();
   const meals = await get('seafood');
+  countMeals(meals);
   meals.forEach((meal) => {
     const id = meal.idMeal;
     const recipeContainer = document.createElement('div');

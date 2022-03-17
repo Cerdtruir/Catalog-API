@@ -4,14 +4,15 @@
   "description": "",
   "private": true,
   "scripts": {
+    "test": "jest --env=jsdom",
     "build": "webpack",
-    "start": "webpack serve --open",
-    "test": "jest"
+    "start": "webpack serve --open"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@babel/plugin-transform-modules-commonjs": "^7.17.7",
     "css-loader": "^6.6.0",
     "html-webpack-plugin": "^5.5.0",
     "style-loader": "^3.3.1",
