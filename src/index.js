@@ -1,4 +1,5 @@
 import './style.css';
+import countMeals from './counter.js';
 
 async function get(category) {
   const response = await fetch(
@@ -34,11 +35,6 @@ async function getLikeAPI() {
   );
   const jsonResponse = await response.json();
   return jsonResponse;
-}
-
-function countMeals(mealsArray) {
-  const amountOfItems = mealsArray.length;
-  document.body.querySelector('.nav-seafood').append(` (${amountOfItems})`);
 }
 
 async function generateHTML() {
