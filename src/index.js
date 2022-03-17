@@ -36,10 +36,16 @@ async function getLikeAPI() {
   return jsonResponse;
 }
 
+function countMeals(mealsArray) {
+  const amountOfItems = mealsArray.length;
+  document.body.querySelector('.nav-seafood').append(` (${amountOfItems})`);
+}
+
 async function generateHTML() {
   const page = document.getElementById('main');
   const likesArray = await getLikeAPI();
   const meals = await get('seafood');
+  countMeals(meals);
   meals.forEach((meal) => {
     const id = meal.idMeal;
     const recipeContainer = document.createElement('div');
