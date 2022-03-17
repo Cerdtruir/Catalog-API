@@ -26,6 +26,48 @@ a {
   color: white;
 }
 
+#main {
+  margin: 20px auto;
+  width: 80%;
+  display: grid;
+  grid-template-columns: auto auto auto;
+  grid-template-rows: auto;
+  row-gap: 30px;
+}
+
+.recipe-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.recipe-image {
+  width: 30vh;
+  height: 30vh;
+}
+
+.text-container {
+  display: flex;
+  align-items: center;
+  width: 60%;
+  justify-content: space-between;
+}
+
+.heart {
+  color: red;
+  font-size: 30px;
+}
+
+.comments-button,
+.reservations-button {
+  width: 50%;
+  height: 40px;
+  margin-top: 10px;
+  background-color: white;
+  font-weight: 700;
+}
+
 footer {
   display: flex;
   justify-content: center;
