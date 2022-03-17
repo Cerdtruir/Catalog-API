@@ -8,6 +8,24 @@ async function get(category) {
   return jsonResponse.meals;
 }
 
+async function likeAPI(itemID, heart, likeCounterNumber) {
+  if (heart.innerHTML === '♡') {
+    heart.innerHTML = '&#10084;';
+    await fetch(
+      'https://us-central1-involvement-api.cloudfunctions.net/capstoneApi/apps/gPGYyR5ezimXgm2rDsPh/likes',
+      {
+        method: 'POST',
+        body: JSON.stringify({
+          item_id: itemID,
+        }),
+        headers: {
+          'Content-type': 'application/json; charset=UTF-8',
+        },
+      },
+    );
+  }
+}
+
 async function generateHTML() {
   const meals = await get('seafood');
   console.log(meals);
@@ -23,9 +41,12 @@ async function generateHTML() {
     const textContainer = document.createElement('div');
     textContainer.classList.add('text-container');
 
-    const heart = document.createElement('span');
+    const heart = document.createElement('p');
     heart.classList.add('heart');
     heart.innerHTML = '&#9825';
+    heart.onclick = () => {
+      likeAPI(id, heart, likeCounterNumber);
+    };
 
     const name = document.createElement('h3');
     name.classList.add('recipe-heading');
