@@ -37,8 +37,6 @@ async function getLikeAPI() {
 }
 
 async function generateHTML() {
-  const meals = await get('seafood');
-  console.log(meals);
   const page = document.getElementById('main');
   const likesArray = await getLikeAPI();
   const meals = await get('seafood');
@@ -88,6 +86,7 @@ async function generateHTML() {
     reservationsButton.innerText = 'Reservations';
 
     textContainer.append(name, heart, likeCounterText, likeCounterNumber);
+    recipeContainer.append(image, textContainer, commentsButton, orderButton);
     page.appendChild(recipeContainer);
   });
 }
