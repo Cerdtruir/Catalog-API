@@ -79,16 +79,15 @@ async function generateHTML() {
     name.classList.add('recipe-heading');
     name.innerText = meal.strMeal;
 
-    const commentsButton = document.createElement('button');
-    commentsButton.classList.add('comments-button');
-    commentsButton.innerText = 'Comments';
-
-    const orderButton = document.createElement('button');
-    orderButton.classList.add('order-button');
-    orderButton.innerText = 'Order';
+    const recipeButton = document.createElement('button');
+    recipeButton.classList.add('recipe-button');
+    recipeButton.innerText = 'Recipe';
+    recipeButton.onclick = () => {
+      recipeSection(id);
+    };
 
     textContainer.append(name, heart, likeCounterText, likeCounterNumber);
-    recipeContainer.append(image, textContainer, commentsButton, orderButton);
+    recipeContainer.append(image, textContainer, recipeButton);
     page.appendChild(recipeContainer);
   });
 }

@@ -85,11 +85,9 @@ a {
   cursor: pointer;
 }
 
-.comments-button,
-.order-button {
+.recipe-button {
   width: 50%;
   height: 40px;
-  margin-top: 10px;
   background-color: white;
   font-weight: 700;
 }
