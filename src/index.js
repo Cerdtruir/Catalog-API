@@ -93,4 +93,8 @@ async function generateHTML() {
   });
 }
 
+document.body.querySelector('.hamburger').onclick = () => {
+  document.body.querySelector('.ul').classList.toggle('ul-show');
+};
+
 generateHTML();
