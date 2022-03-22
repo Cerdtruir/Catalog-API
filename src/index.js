@@ -138,11 +138,12 @@ async function recipeSection(id) {
   commentSection(id);
 }
 
-async function generateHTML() {
+async function generateHTML(category) {
+  document.getElementById('main').innerHTML = '';
   const page = document.getElementById('main');
   const likesArray = await getLikeAPI();
-  const meals = await get('seafood');
-  countMeals(meals);
+  const meals = await get(category);
+  countMeals(meals, category);
   meals.forEach((meal) => {
     const id = meal.idMeal;
     const recipeContainer = document.createElement('div');
@@ -203,4 +204,16 @@ document.body.querySelector('.hamburger').onclick = () => {
   document.body.querySelector('.ul').classList.toggle('ul-show');
 };
 
-generateHTML();
+generateHTML('seafood');
+
+document.body.querySelector('.nav-seafood').onclick = () => {
+  generateHTML('seafood');
+};
+
+document.body.querySelector('.nav-vegetarian').onclick = () => {
+  generateHTML('vegetarian');
+};
+
+document.body.querySelector('.nav-chicken').onclick = () => {
+  generateHTML('chicken');
+};
