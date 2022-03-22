@@ -1,7 +1,6 @@
 import countMeals, { updateCounter } from './counter.js';
 
-document.body.innerHTML =
-  '<p class="nav-seafood"></p> <h2 class="comments-heading"></h2>';
+document.body.innerHTML = '<p class="nav-seafood"></p> <h2 class="comments-heading"></h2>';
 
 describe('count meals', () => {
   test('count meals', () => {
