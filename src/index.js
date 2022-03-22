@@ -37,6 +37,37 @@ async function getLikeAPI() {
   return jsonResponse;
 }
 
+async function getRecipeInfo(id) {
+  const response = await fetch(
+    `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`,
+  );
+  const jsonResponse = await response.json();
+  return jsonResponse.meals[0];
+}
+
+async function recipeSection(id) {
+  const mealDetails = await getRecipeInfo(id);
+  document.body
+    .querySelector('.recipe-details')
+    .classList.remove('recipe-details-hide');
+  document.body.querySelector('.recipe-modal-heading').innerText = mealDetails.strMeal;
+  document.body.querySelector('.recipe-modal-image').src = mealDetails.strMealThumb;
+  document.body.querySelector('.recipe-modal-instructions').innerText = mealDetails.strInstructions;
+  document.body.querySelector('.recipe-modal-ingredients').innerHTML = '';
+  for (let i = 1; i < 20; i += 1) {
+    const ingredients = document.createElement('li');
+    const ingredient = `strIngredient${i}`;
+    const measurement = `strMeasure${i}`;
+    if (mealDetails[ingredient] === '') {
+      return;
+    }
+    ingredients.innerText = `${mealDetails[measurement]} ${mealDetails[ingredient]}`;
+    document.body
+      .querySelector('.recipe-modal-ingredients')
+      .append(ingredients);
+  }
+}
+
 async function generateHTML() {
   const page = document.getElementById('main');
   const likesArray = await getLikeAPI();
@@ -50,6 +81,12 @@ async function generateHTML() {
     const image = document.createElement('img');
     image.classList.add('recipe-image');
     image.src = meal.strMealThumb;
+
+    document.body.querySelector('.close-modal').onclick = () => {
+      document.body
+        .querySelector('.recipe-details')
+        .classList.add('recipe-details-hide');
+    };
 
     const textContainer = document.createElement('div');
     textContainer.classList.add('text-container');
@@ -79,16 +116,15 @@ async function generateHTML() {
     name.classList.add('recipe-heading');
     name.innerText = meal.strMeal;
 
-    const commentsButton = document.createElement('button');
-    commentsButton.classList.add('comments-button');
-    commentsButton.innerText = 'Comments';
-
-    const orderButton = document.createElement('button');
-    orderButton.classList.add('order-button');
-    orderButton.innerText = 'Order';
+    const recipeButton = document.createElement('button');
+    recipeButton.classList.add('recipe-button');
+    recipeButton.innerText = 'Recipe';
+    recipeButton.onclick = () => {
+      recipeSection(id);
+    };
 
     textContainer.append(name, heart, likeCounterText, likeCounterNumber);
-    recipeContainer.append(image, textContainer, commentsButton, orderButton);
+    recipeContainer.append(image, textContainer, recipeButton);
     page.appendChild(recipeContainer);
   });
 }
