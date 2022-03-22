@@ -50,12 +50,9 @@ async function recipeSection(id) {
   document.body
     .querySelector('.recipe-details')
     .classList.remove('recipe-details-hide');
-  document.body.querySelector('.recipe-modal-heading').innerText =
-    mealDetails.strMeal;
-  document.body.querySelector('.recipe-modal-image').src =
-    mealDetails.strMealThumb;
-  document.body.querySelector('.recipe-modal-instructions').innerText =
-    mealDetails.strInstructions;
+  document.body.querySelector('.recipe-modal-heading').innerText = mealDetails.strMeal;
+  document.body.querySelector('.recipe-modal-image').src = mealDetails.strMealThumb;
+  document.body.querySelector('.recipe-modal-instructions').innerText = mealDetails.strInstructions;
   document.body.querySelector('.recipe-modal-ingredients').innerHTML = '';
   for (let i = 1; i < 20; i += 1) {
     const ingredients = document.createElement('li');
