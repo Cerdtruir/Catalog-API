@@ -1,6 +1,7 @@
-import countMeals from './counter.js';
+import countMeals, { updateCounter } from './counter.js';
 
-document.body.innerHTML = '<p class="nav-seafood"></p>';
+document.body.innerHTML =
+  '<p class="nav-seafood"></p> <h2 class="comments-heading"></h2>';
 
 describe('count meals', () => {
   test('count meals', () => {
@@ -8,5 +9,14 @@ describe('count meals', () => {
   });
   test('count meals 0', () => {
     expect(countMeals([])).toBe(0);
+  });
+});
+
+describe('count meals', () => {
+  test('count comments', () => {
+    expect(updateCounter([1, 2, 3, 4])).toBe(4);
+  });
+  test('count comments 0', () => {
+    expect(updateCounter([])).toBe(0);
   });
 });
