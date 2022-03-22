@@ -1,6 +1,8 @@
-export default function countMeals(mealsArray) {
+export default function countMeals(mealsArray, pageClass) {
   const amountOfItems = mealsArray.length;
-  document.body.querySelector('.nav-seafood').append(` (${amountOfItems})`);
+  if (!document.body.querySelector(`.nav-${pageClass}`).innerText.includes(')')) {
+    document.body.querySelector(`.nav-${pageClass}`).append(` (${amountOfItems})`);
+  }
   return amountOfItems;
 }
 
