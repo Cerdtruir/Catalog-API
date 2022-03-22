@@ -1,5 +1,5 @@
 import './style.css';
-import countMeals from './counter.js';
+import countMeals, { updateCounter } from './counter.js';
 
 async function get(category) {
   const response = await fetch(
@@ -90,7 +90,7 @@ async function commentSection(id) {
     comments.forEach((comment) => {
       addCommentHTML(comment);
     });
-  return jsonResponse.meals[0];
+    updateCounter(comments);
     return;
   }
   document.body.querySelector('.comments-heading').innerText = 'Comments';
@@ -106,6 +106,7 @@ async function addComment(id) {
   const commentsArray = await getCommentAPI(id);
   const newComment = commentsArray[commentsArray.length - 1];
   addCommentHTML(newComment);
+  updateCounter(commentsArray);
   document.body.querySelector('.form-name').value = '';
   document.querySelector('.form-comment').value = '';
 }
