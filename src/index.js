@@ -9,7 +9,15 @@ async function get(category) {
   return jsonResponse.meals;
 }
 
-async function likeAPI(itemID, heart, likeCounterNumber) {
+async function getRecipeInfo(id) {
+  const response = await fetch(
+    `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`,
+  );
+  const jsonResponse = await response.json();
+  return jsonResponse.meals[0];
+}
+
+async function postLikeAPI(itemID, heart, likeCounterNumber) {
   const currentValue = Number(likeCounterNumber.innerText);
   if (heart.innerHTML === '♡') {
     heart.innerHTML = '&#10084;';
@@ -37,12 +45,69 @@ async function getLikeAPI() {
   return jsonResponse;
 }
 
-async function getRecipeInfo(id) {
+async function postCommentAPI(itemID, name, comment) {
+  await fetch(
+    'https://us-central1-involvement-api.cloudfunctions.net/capstoneApi/apps/gPGYyR5ezimXgm2rDsPh/comments',
+    {
+      method: 'POST',
+      body: JSON.stringify({
+        item_id: itemID,
+        username: name,
+        comment,
+      }),
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8',
+      },
+    },
+  );
+}
+
+async function getCommentAPI(itemID) {
   const response = await fetch(
-    `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`,
+    `https://us-central1-involvement-api.cloudfunctions.net/capstoneApi/apps/gPGYyR5ezimXgm2rDsPh/comments?item_id=${itemID}`,
   );
   const jsonResponse = await response.json();
+  return jsonResponse;
+}
+
+function addCommentHTML(comment) {
+  const listItem = document.createElement('li');
+  listItem.classList.add('comment-list-item');
+  const commentName = document.createElement('p');
+  const commentText = document.createElement('p');
+  const commentDate = document.createElement('p');
+  commentName.innerText = `${comment.username}:`;
+  commentText.innerText = `${comment.comment}`;
+  commentDate.innerText = `${comment.creation_date}`;
+  listItem.append(commentName, commentText, commentDate);
+  document.body.querySelector('.comments-list').append(listItem);
+}
+
+async function commentSection(id) {
+  document.body.querySelector('.comments-list').innerHTML = '';
+  const comments = await getCommentAPI(id);
+  if (Array.isArray(comments)) {
+    comments.forEach((comment) => {
+      addCommentHTML(comment);
+    });
   return jsonResponse.meals[0];
+    return;
+  }
+  document.body.querySelector('.comments-heading').innerText = 'Comments';
+}
+
+async function addComment(id) {
+  const name = document.body.querySelector('.form-name').value;
+  const comment = document.querySelector('.form-comment').value;
+  if (name === '' || comment === '') {
+    return;
+  }
+  await postCommentAPI(id, name, comment);
+  const commentsArray = await getCommentAPI(id);
+  const newComment = commentsArray[commentsArray.length - 1];
+  addCommentHTML(newComment);
+  document.body.querySelector('.form-name').value = '';
+  document.querySelector('.form-comment').value = '';
 }
 
 async function recipeSection(id) {
@@ -50,25 +115,26 @@ async function recipeSection(id) {
   document.body
     .querySelector('.recipe-details')
     .classList.remove('recipe-details-hide');
-  document.body.querySelector('.recipe-modal-heading').innerText =
-    mealDetails.strMeal;
-  document.body.querySelector('.recipe-modal-image').src =
-    mealDetails.strMealThumb;
-  document.body.querySelector('.recipe-modal-instructions').innerText =
-    mealDetails.strInstructions;
+  document.body.querySelector('.recipe-modal-heading').innerText = mealDetails.strMeal;
+  document.body.querySelector('.recipe-modal-image').src = mealDetails.strMealThumb;
+  document.body.querySelector('.recipe-modal-instructions').innerText = mealDetails.strInstructions;
   document.body.querySelector('.recipe-modal-ingredients').innerHTML = '';
   for (let i = 1; i < 20; i += 1) {
     const ingredients = document.createElement('li');
     const ingredient = `strIngredient${i}`;
     const measurement = `strMeasure${i}`;
     if (mealDetails[ingredient] === '') {
-      return;
+      break;
     }
     ingredients.innerText = `${mealDetails[measurement]} ${mealDetails[ingredient]}`;
     document.body
       .querySelector('.recipe-modal-ingredients')
       .append(ingredients);
   }
+  document.body.querySelector('.add-comment-button').onclick = () => {
+    addComment(id);
+  };
+  commentSection(id);
 }
 
 async function generateHTML() {
@@ -112,7 +178,7 @@ async function generateHTML() {
     heart.classList.add('heart');
     heart.innerHTML = '&#9825';
     heart.onclick = () => {
-      likeAPI(id, heart, likeCounterNumber);
+      postLikeAPI(id, heart, likeCounterNumber);
     };
 
     const name = document.createElement('h3');
