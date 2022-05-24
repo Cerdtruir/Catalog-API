@@ -111,7 +111,22 @@ async function addComment(id) {
   document.querySelector('.form-comment').value = '';
 }
 
-async function recipeSection(id) {
+const renderIngredients = (mealDetails) => {
+  for (let i = 1; i < 20; i += 1) {
+    const ingredients = document.createElement('li');
+    const ingredient = `strIngredient${i}`;
+    const measurement = `strMeasure${i}`;
+    if (mealDetails[ingredient] === '') {
+      return;
+    }
+    ingredients.innerText = `${mealDetails[measurement]} ${mealDetails[ingredient]}`;
+    document.body
+      .querySelector('.recipe-modal-ingredients')
+      .append(ingredients);
+  }
+};
+
+async function renderRecipeSection(id) {
   const mealDetails = await getRecipeInfo(id);
   document.body
     .querySelector('.recipe-details')
@@ -120,18 +135,9 @@ async function recipeSection(id) {
   document.body.querySelector('.recipe-modal-image').src = mealDetails.strMealThumb;
   document.body.querySelector('.recipe-modal-instructions').innerText = mealDetails.strInstructions;
   document.body.querySelector('.recipe-modal-ingredients').innerHTML = '';
-  for (let i = 1; i < 20; i += 1) {
-    const ingredients = document.createElement('li');
-    const ingredient = `strIngredient${i}`;
-    const measurement = `strMeasure${i}`;
-    if (mealDetails[ingredient] === '') {
-      break;
-    }
-    ingredients.innerText = `${mealDetails[measurement]} ${mealDetails[ingredient]}`;
-    document.body
-      .querySelector('.recipe-modal-ingredients')
-      .append(ingredients);
-  }
+
+  renderIngredients(mealDetails);
+
   document.body.querySelector('.add-comment-button').onclick = () => {
     addComment(id);
   };
@@ -191,7 +197,7 @@ async function generateHTML(category) {
     recipeButton.classList.add('recipe-button');
     recipeButton.innerText = 'Recipe';
     recipeButton.onclick = () => {
-      recipeSection(id);
+      renderRecipeSection(id);
     };
 
     textContainer.append(name, heart, likeCounterText, likeCounterNumber);
