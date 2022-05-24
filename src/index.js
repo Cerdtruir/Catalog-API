@@ -144,7 +144,7 @@ async function renderRecipeSection(id) {
   commentSection(id);
 }
 
-async function generateHTML(category) {
+async function generateRecipesPage(category) {
   document.getElementById('main').innerHTML = '';
   const page = document.getElementById('main');
   const likesArray = await getLikeAPI();
@@ -210,16 +210,16 @@ document.body.querySelector('.hamburger').onclick = () => {
   document.body.querySelector('.ul').classList.toggle('ul-show');
 };
 
-generateHTML('seafood');
+generateRecipesPage('seafood');
 
 document.body.querySelector('.nav-seafood').onclick = () => {
-  generateHTML('seafood');
+  generateRecipesPage('seafood');
 };
 
 document.body.querySelector('.nav-vegetarian').onclick = () => {
-  generateHTML('vegetarian');
+  generateRecipesPage('vegetarian');
 };
 
 document.body.querySelector('.nav-chicken').onclick = () => {
-  generateHTML('chicken');
+  generateRecipesPage('chicken');
 };
