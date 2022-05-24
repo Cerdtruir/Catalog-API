@@ -1,15 +1,16 @@
 # Catalog-API-Site
 
-A recipe catalog site, built using themealdb API
+A recipe catalog site, built using The Meal DB API
+
+## Screenshot
+
+![Screenshot](recipe-screenshot.png)
 
 ## Built With
 
 - JavaScript
 - HTML
 - CSS
-
-## Screenshot
-
 
 ## Live Demo
 
@@ -23,4 +24,4 @@ A recipe catalog site, built using themealdb API
 
 ## Acknowledgements 
 
-- www.themealdb.com
+- [The Meal DB API](https://www.themealdb.com/)

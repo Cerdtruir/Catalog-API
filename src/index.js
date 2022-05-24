@@ -1,5 +1,5 @@
 import './style.css';
-import countMeals, { updateCounter } from './counter.js';
+import renderCountofMeals, { updateCounter } from './counter.js';
 
 async function get(category) {
   const response = await fetch(
@@ -111,7 +111,22 @@ async function addComment(id) {
   document.querySelector('.form-comment').value = '';
 }
 
-async function recipeSection(id) {
+const renderIngredients = (mealDetails) => {
+  for (let i = 1; i < 20; i += 1) {
+    const ingredients = document.createElement('li');
+    const ingredient = `strIngredient${i}`;
+    const measurement = `strMeasure${i}`;
+    if (mealDetails[ingredient] === '') {
+      return;
+    }
+    ingredients.innerText = `${mealDetails[measurement]} ${mealDetails[ingredient]}`;
+    document.body
+      .querySelector('.recipe-modal-ingredients')
+      .append(ingredients);
+  }
+};
+
+async function renderRecipeSection(id) {
   const mealDetails = await getRecipeInfo(id);
   document.body
     .querySelector('.recipe-details')
@@ -120,32 +135,19 @@ async function recipeSection(id) {
   document.body.querySelector('.recipe-modal-image').src = mealDetails.strMealThumb;
   document.body.querySelector('.recipe-modal-instructions').innerText = mealDetails.strInstructions;
   document.body.querySelector('.recipe-modal-ingredients').innerHTML = '';
-  for (let i = 1; i < 20; i += 1) {
-    const ingredients = document.createElement('li');
-    const ingredient = `strIngredient${i}`;
-    const measurement = `strMeasure${i}`;
-    if (mealDetails[ingredient] === '') {
-      break;
-    }
-    ingredients.innerText = `${mealDetails[measurement]} ${mealDetails[ingredient]}`;
-    document.body
-      .querySelector('.recipe-modal-ingredients')
-      .append(ingredients);
-  }
+
+  renderIngredients(mealDetails);
+
   document.body.querySelector('.add-comment-button').onclick = () => {
     addComment(id);
   };
   commentSection(id);
 }
 
-async function generateHTML(category) {
-  document.getElementById('main').innerHTML = '';
-  const page = document.getElementById('main');
-  const likesArray = await getLikeAPI();
-  const meals = await get(category);
-  countMeals(meals, category);
+const renderMeals = (meals, likesArray, page) => {
   meals.forEach((meal) => {
     const id = meal.idMeal;
+
     const recipeContainer = document.createElement('div');
     recipeContainer.classList.add('recipe-block');
 
@@ -191,29 +193,41 @@ async function generateHTML(category) {
     recipeButton.classList.add('recipe-button');
     recipeButton.innerText = 'Recipe';
     recipeButton.onclick = () => {
-      recipeSection(id);
+      renderRecipeSection(id);
     };
 
     textContainer.append(name, heart, likeCounterText, likeCounterNumber);
     recipeContainer.append(image, textContainer, recipeButton);
     page.appendChild(recipeContainer);
   });
+};
+
+async function generateRecipesPage(category) {
+  const page = document.getElementById('main');
+  const likesArray = await getLikeAPI();
+  const meals = await get(category);
+
+  page.innerHTML = '';
+
+  renderCountofMeals(meals, category);
+
+  renderMeals(meals, likesArray, page);
 }
 
 document.body.querySelector('.hamburger').onclick = () => {
   document.body.querySelector('.ul').classList.toggle('ul-show');
 };
 
-generateHTML('seafood');
+generateRecipesPage('seafood');
 
 document.body.querySelector('.nav-seafood').onclick = () => {
-  generateHTML('seafood');
+  generateRecipesPage('seafood');
 };
 
 document.body.querySelector('.nav-vegetarian').onclick = () => {
-  generateHTML('vegetarian');
+  generateRecipesPage('vegetarian');
 };
 
 document.body.querySelector('.nav-chicken').onclick = () => {
-  generateHTML('chicken');
+  generateRecipesPage('chicken');
 };
