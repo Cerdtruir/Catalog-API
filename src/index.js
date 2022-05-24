@@ -144,14 +144,10 @@ async function renderRecipeSection(id) {
   commentSection(id);
 }
 
-async function generateRecipesPage(category) {
-  document.getElementById('main').innerHTML = '';
-  const page = document.getElementById('main');
-  const likesArray = await getLikeAPI();
-  const meals = await get(category);
-  renderCountofMeals(meals, category);
+const renderMeals = (meals, likesArray, page) => {
   meals.forEach((meal) => {
     const id = meal.idMeal;
+
     const recipeContainer = document.createElement('div');
     recipeContainer.classList.add('recipe-block');
 
@@ -204,6 +200,18 @@ async function generateRecipesPage(category) {
     recipeContainer.append(image, textContainer, recipeButton);
     page.appendChild(recipeContainer);
   });
+};
+
+async function generateRecipesPage(category) {
+  const page = document.getElementById('main');
+  const likesArray = await getLikeAPI();
+  const meals = await get(category);
+
+  page.innerHTML = '';
+
+  renderCountofMeals(meals, category);
+
+  renderMeals(meals, likesArray, page);
 }
 
 document.body.querySelector('.hamburger').onclick = () => {
