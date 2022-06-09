@@ -23,7 +23,7 @@ async function postLikeAPI(itemID, heart, likeCounterNumber) {
     heart.innerHTML = '&#10084;';
     likeCounterNumber.innerText = currentValue + 1;
     await fetch(
-      'https://us-central1-involvement-api.cloudfunctions.net/capstoneApi/apps/gPGYyR5ezimXgm2rDsPh/likes',
+      `https://us-central1-involvement-api.cloudfunctions.net/capstoneApi/apps/${process.env.API_KEY}/likes`,
       {
         method: 'POST',
         body: JSON.stringify({
@@ -39,7 +39,7 @@ async function postLikeAPI(itemID, heart, likeCounterNumber) {
 
 async function getLikeAPI() {
   const response = await fetch(
-    'https://us-central1-involvement-api.cloudfunctions.net/capstoneApi/apps/gPGYyR5ezimXgm2rDsPh/likes',
+    `https://us-central1-involvement-api.cloudfunctions.net/capstoneApi/apps/${process.env.API_KEY}/likes`,
   );
   const jsonResponse = await response.json();
   return jsonResponse;
@@ -47,7 +47,7 @@ async function getLikeAPI() {
 
 async function postCommentAPI(itemID, name, comment) {
   await fetch(
-    'https://us-central1-involvement-api.cloudfunctions.net/capstoneApi/apps/gPGYyR5ezimXgm2rDsPh/comments',
+    `https://us-central1-involvement-api.cloudfunctions.net/capstoneApi/apps/${process.env.API_KEY}/comments`,
     {
       method: 'POST',
       body: JSON.stringify({
@@ -64,7 +64,7 @@ async function postCommentAPI(itemID, name, comment) {
 
 async function getCommentAPI(itemID) {
   const response = await fetch(
-    `https://us-central1-involvement-api.cloudfunctions.net/capstoneApi/apps/gPGYyR5ezimXgm2rDsPh/comments?item_id=${itemID}`,
+    `https://us-central1-involvement-api.cloudfunctions.net/capstoneApi/apps/${process.env.API_KEY}/comments?item_id=${itemID}`,
   );
   const jsonResponse = await response.json();
   return jsonResponse;
